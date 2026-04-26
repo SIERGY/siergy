@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend Web - Prediksi Masa Tanam Padi Desa Pisangsambo
 
-## Getting Started
+Direktori ini memuat _source code frontend_ berbasis **Next.js** untuk proyek "Rancang Bangun Sistem Informasi Prediksi Masa Tanam Komoditas Pertanian Berbasis Web pada Desa Pisangsambo".
 
-First, run the development server:
+Aplikasi ini bertindak sebagai antarmuka utama (UI) yang interaktif bagi pengguna (seperti petani atau penyuluh) untuk menginput parameter tanah dan iklim, lalu menampilkan visualisasi rekomendasi jadwal tanam yang dihasilkan oleh model Machine Learning di _backend_.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Fitur Utama
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Form Input Parameter:** Antarmuka responsif untuk memasukkan data uji tanah (N, P, K, pH) dan data iklim bulanan (Suhu, Kelembapan, Curah Hujan).
+- **Integrasi API Real-time:** Menghubungkan _input user_ secara langsung dengan _microservice_ API Flask untuk mendapatkan prediksi secara instan.
+- **Visualisasi Hasil:** Menampilkan status "Direkomendasikan" atau "Tidak Direkomendasikan" per bulan beserta ringkasan jadwal tanam terbaik.
+- **Progressive Web App (PWA) Ready:** Arsitektur yang disiapkan untuk mendukung kapabilitas PWA, memungkinkan akses yang lebih cepat dan _app-like experience_ di perangkat _mobile_ pengguna.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Prasyarat Sistem
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Sebelum menjalankan _project_ ini secara lokal, pastikan lingkungan _development_ Anda telah terinstal:
 
-## Learn More
+- **Node.js** (Versi 20.x atau lebih baru disarankan)
+- **npm** atau **yarn** atau **pnpm** (sebagai _package manager_)
+- Server API Flask (backend ML) sudah berjalan di _environment_ terpisah.
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Cara Menjalankan (Development)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Masuk ke direktori web dan instal dependensi:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   cd siergy
+   npm install
+   ```
 
-## Deploy on Vercel
+2. **Konfigurasi Environment Variable:**
+   Buat file `.env` di _root_ direktori `siergy` dan atur URL endpoint untuk API Flask.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```env
+   DB_USER=postgres
+   DB_HOST=localhost
+   DB_NAME=siergy
+   DB_PASSWORD=yourpassword
+   DB_PORT=5432
+   JWT_SECRET=your_jwt_secret_key
+   ML_API_URL=http://localhost:5000
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Jalankan Development Server:**
+   ```bash
+   npm run dev
+   ```
+   Buka [http://localhost:3000](http://localhost:3000) di _browser_ Anda untuk melihat hasil _render_ aplikasi.
+
+## 📦 Skrip Tambahan
+
+- `npm run build`: Melakukan _build production_ untuk optimasi performa halaman (SSG/SSR).
+- `npm run start`: Menjalankan server _production_ setelah proses _build_ selesai.
+- `npm run lint`: Memeriksa standar penulisan kode (_linting_) untuk menjaga kualitas _codebase_.
+
+## 🌐 Catatan Deployment
+
+Proyek Next.js ini sudah dikonfigurasi dan sangat dioptimalkan untuk di- _deploy_ melalui **Vercel**.

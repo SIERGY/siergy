@@ -1,0 +1,30 @@
+{
+  "name": "SIERGY - Sistem Informasi Era Revolusi Green Yield",
+  "short_name": "SIERGY",
+  "description": "SIERGY adalah aplikasi prediksi waktu tanam padi berbasis Machine Learning yang membantu petani menentukan waktu tanam terbaik berdasarkan data tanah dan iklim.",
+  "theme_color": "#ffffff",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ], 
+  "orientation": "portrait",
+  "categories": ["Agriculture", "Productivity", "Education"]
+}

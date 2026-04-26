@@ -158,20 +158,20 @@ export default function Homepage() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-green-50 via-emerald-50 to-teal-50">
-      <div className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
+      <div className="container mx-auto px-4 md:py-8 max-w-6xl space-y-8">
         {/* HEADER SECTION */}
         <div className="text-center space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="inline-flex items-center gap-2 bg-green-100 px-4 py-2 rounded-full text-green-700 text-sm font-semibold">
             <TrendingUp size={16} />
             AI Precision Agriculture
           </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight">
+          <h1 className="text-2xl md:text-6xl font-extrabold text-gray-900 tracking-tight">
             Cek Kecocokan{" "}
             <span className="bg-linear-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
               Masa Tanam
             </span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xs md:text-lg text-gray-600 max-w-2xl mx-auto">
             Gunakan kecerdasan buatan untuk memprediksi apakah lahan Anda cocok
             untuk ditanami padi pada periode tertentu berdasarkan data cuaca.
           </p>
@@ -184,7 +184,7 @@ export default function Homepage() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Input Kondisi Lahan */}
               <div className="space-y-3">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
                   <label className="flex items-center gap-2 text-sm font-bold text-gray-700">
                     <Leaf size={18} className="text-green-600" />
                     Kondisi Lahan Saat Ini
@@ -194,7 +194,7 @@ export default function Homepage() {
                   <label className="flex items-center gap-1.5 text-xs text-gray-500 cursor-pointer hover:text-green-600 transition">
                     <input
                       type="checkbox"
-                      className="rounded text-green-600 focus:ring-green-500"
+                      className="rounded text-green-600 focus:ring-green-500 w-3.5 h-3.5 sm:w-4 sm:h-4"
                       checked={isExpertMode}
                       onChange={(e) => setIsExpertMode(e.target.checked)}
                     />
@@ -279,7 +279,7 @@ export default function Homepage() {
                   <select
                     value={selectedTanah}
                     onChange={(e) => setSelectedTanah(e.target.value)}
-                    className="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-gray-800 bg-gray-50 transition-all"
+                    className="w-full p-2 md:p-3 border border-gray-300 rounded-md md:rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-gray-800 bg-gray-50 transition-all text-xs sm:text-base"
                   >
                     {tanahList.map((t) => (
                       <option key={t.id} value={t.id}>
@@ -298,14 +298,18 @@ export default function Homepage() {
                 </label>
                 <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-200">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Bulan terpilih:</span>
-                    <span className="font-bold text-gray-900">
+                    <span className="text-gray-600 text-xs sm:text-base">
+                      Bulan terpilih:
+                    </span>
+                    <span className="font-bold text-gray-900 text-xs sm:text-base">
                       {selectedBulanList.length}
                     </span>
                   </div>
                   <div className="flex justify-between items-center mt-1">
-                    <span className="text-gray-600">Status:</span>
-                    <span className="text-sm text-green-600 font-medium">
+                    <span className="text-gray-600 text-xs sm:text-base">
+                      Status:
+                    </span>
+                    <span className="text-xs sm:text-xs text-green-600 font-medium">
                       {selectedBulanList.length > 0
                         ? "Siap dianalisis"
                         : "Pilih minimal 1 bulan"}
@@ -322,7 +326,7 @@ export default function Homepage() {
                   <CloudRain size={18} className="text-blue-500" />
                   Pilih Bulan Tanam (Multi-select)
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-1 flex-wrap justify-end">
                   <button
                     type="button"
                     onClick={selectAllBulan}
@@ -340,7 +344,7 @@ export default function Homepage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+              <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
                 {bulanList.map((bulan) => {
                   const isSelected = selectedBulanList.includes(bulan);
                   return (
@@ -349,7 +353,7 @@ export default function Homepage() {
                       type="button"
                       onClick={() => toggleBulan(bulan)}
                       className={`
-                        p-2 rounded-lg text-sm font-medium transition-all
+                        p-2 rounded-lg text-[10px] md:text-sm font-medium transition-all
                         ${
                           isSelected
                             ? "bg-green-500 text-white shadow-md scale-105"
@@ -357,12 +361,12 @@ export default function Homepage() {
                         }
                       `}
                     >
-                      {bulan.substring(0, 3)}
+                      {bulan}
                     </button>
                   );
                 })}
               </div>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs italic text-gray-500 mt-2">
                 * Klik bulan untuk memilih/membatalkan. Pilih beberapa bulan
                 untuk analisis periode tanam.
               </p>
@@ -375,7 +379,7 @@ export default function Homepage() {
                 tanahList.length === 0 ||
                 selectedBulanList.length === 0
               }
-              className="w-full py-4 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              className="w-full py-4 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-xl font-bold text-sm md:text-lg flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             >
               {loadingPrediksi ? (
                 <>
@@ -415,7 +419,7 @@ export default function Homepage() {
               <div className="flex flex-wrap gap-4">
                 <div className="bg-white/20 rounded-lg px-4 py-2 backdrop-blur-sm">
                   <div className="text-sm opacity-90">✓ Direkomendasikan</div>
-                  <div className="font-bold text-xl">
+                  <div className="font-bold text-md md:text-xl">
                     {hasilPrediksi.summary?.rekomendasi?.length || 0} bulan
                   </div>
                 </div>
@@ -423,7 +427,7 @@ export default function Homepage() {
                   <div className="text-sm opacity-90">
                     ✗ Tidak Direkomendasikan
                   </div>
-                  <div className="font-bold text-xl">
+                  <div className="font-bold text-md md:text-xl">
                     {hasilPrediksi.summary?.tidak_direkomendasikan?.length || 0}{" "}
                     bulan
                   </div>
@@ -450,6 +454,12 @@ export default function Homepage() {
                         Curah Hujan (mm)
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Suhu (°C)
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Kelembaban (%)
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
                       </th>
                     </tr>
@@ -466,6 +476,18 @@ export default function Homepage() {
                             <div className="flex items-center gap-2">
                               <CloudRain size={14} className="text-blue-400" />
                               {item.curah_hujan} mm
+                            </div>
+                          </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                            <div className="flex items-center gap-2">
+                              <Thermometer size={14} className="text-red-400" />
+                              {item.suhu} °C
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                            <div className="flex items-center gap-2">
+                              <Droplets size={14} className="text-blue-400" />
+                              {item.kelembaban} %
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
