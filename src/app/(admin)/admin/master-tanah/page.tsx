@@ -16,6 +16,7 @@ import ModalWrapper from "@/components/modal/ModalWrapper";
 import TableSkeleton from "@/components/skeleton/TableMasterTanahSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
 import * as XLSX from "xlsx";
+import Swal from "sweetalert2";
 
 const initialFormState = {
   id: null,
@@ -62,6 +63,10 @@ export default function MasterTanahPage() {
       }
     } catch (err) {
       console.error("Gagal ambil data", err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal memuat data",
+      });
     } finally {
       setLoading(false);
     }
@@ -113,12 +118,26 @@ export default function MasterTanahPage() {
       if (res.ok) {
         setIsModalOpen(false);
         fetchData(currentPage, searchTerm);
+        Swal.fire({
+          icon: "success",
+          title: `Data berhasil ${modalMode === "add" ? "ditambahkan" : "diupdate"}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
         const err = await res.json();
-        alert(`Gagal: ${err.message}`);
+        Swal.fire({
+          icon: "error",
+          title: "Gagal menyimpan data",
+          text: err.message || "Terjadi kesalahan saat menyimpan data.",
+        });
       }
     } catch (err) {
-      alert("Terjadi kesalahan sistem!");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal menyimpan data",
+        text: "Terjadi kesalahan saat menyimpan data.",
+      });
     }
   };
 
@@ -133,37 +152,58 @@ export default function MasterTanahPage() {
         if (data.length === 1 && currentPage > 1)
           setCurrentPage((prev) => prev - 1);
         else fetchData(currentPage, searchTerm);
+        Swal.fire({
+          icon: "success",
+          title: "Data berhasil dihapus",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (err) {
-      alert("Gagal menghapus data!");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal menghapus data",
+      });
     }
   };
 
   const handleExportExcel = async () => {
     try {
-      const res = await fetch(`/api/master-tanah?limit=1000&search=${searchTerm}`);
+      const res = await fetch(
+        `/api/master-tanah?limit=1000&search=${searchTerm}`,
+      );
       const json = await res.json();
 
       if (json.status === "success") {
         const dataSiapExport = json.data.map((item: any, index: number) => ({
-          "No": index + 1,
+          No: index + 1,
           "Kondisi Lahan": item.kondisi_lahan,
           "Nitrogen (N)": item.nilai_n,
           "Fosfor (P)": item.nilai_p,
           "Kalium (K)": item.nilai_k,
           "pH Tanah": item.nilai_ph,
-          "Keterangan": item.keterangan || "-",
+          Keterangan: item.keterangan || "-",
         }));
 
         const ws = XLSX.utils.json_to_sheet(dataSiapExport);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Master Data Tanah");
 
-        const tanggal = new Date().toISOString().split('T')[0];
+        const tanggal = new Date().toISOString().split("T")[0];
         XLSX.writeFile(wb, `Master_Data_Tanah_${tanggal}.xlsx`);
+
+        Swal.fire({
+          icon: "success",
+          title: "Export Excel berhasil",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (error) {
-      alert("Gagal melakukan export Excel!");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal mengekspor data",
+      });
     }
   };
 
@@ -184,7 +224,7 @@ export default function MasterTanahPage() {
 
           <div className="col-span-3 grid-cols-1 gap-4 w-full">
             <div className="flex justify-end mb-2 gap-1 md:gap-2">
-              <button 
+              <button
                 onClick={handleExportExcel}
                 className="flex items-center gap-2 text-green-600 hover:bg-green-700 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shrink-0 border border-green-600 hover:border-green-700"
               >

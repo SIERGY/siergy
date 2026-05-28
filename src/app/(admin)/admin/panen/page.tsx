@@ -11,12 +11,13 @@ import {
   ChevronRight,
   AlertCircle,
   Wheat,
-  FileSpreadsheet, 
+  FileSpreadsheet,
 } from "lucide-react";
 import ModalWrapper from "@/components/modal/ModalWrapper";
 import TableSkeleton from "@/components/skeleton/TablePanenSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
 import * as XLSX from "xlsx";
+import Swal from "sweetalert2";
 
 const initialFormState = {
   id: "",
@@ -56,6 +57,10 @@ export default function KelolaPanenPage() {
       if (json.status === "success") setTanahList(json.data);
     } catch (err) {
       console.error("Error fetching tanah", err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal memuat data lahan",
+      });
     }
   };
 
@@ -73,6 +78,10 @@ export default function KelolaPanenPage() {
       }
     } catch (err) {
       console.error("Error fetching", err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal memuat data histori panen",
+      });
     } finally {
       setLoading(false);
     }
@@ -122,9 +131,18 @@ export default function KelolaPanenPage() {
         if (data.length === 1 && currentPage > 1)
           setCurrentPage((prev) => prev - 1);
         else fetchData(currentPage, searchTerm);
+        Swal.fire({
+          icon: "success",
+          title: "Data berhasil dihapus",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (err) {
-      alert("Gagal menghapus data");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal menghapus data",
+      });
     }
   };
 
@@ -148,11 +166,27 @@ export default function KelolaPanenPage() {
       if (res.ok) {
         setIsModalOpen(false);
         fetchData(currentPage, searchTerm);
+        Swal.fire({
+          icon: "success",
+          title:
+            modalMode === "tambah"
+              ? "Data berhasil ditambahkan"
+              : "Data berhasil diperbarui",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
-        alert(json.message);
+        const errorMsg = json.message || "Gagal menyimpan data";
+        Swal.fire({
+          icon: "error",
+          title: errorMsg,
+        });
       }
     } catch (err) {
-      alert("Terjadi kesalahan server");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal menyimpan data",
+      });
     }
   };
 
@@ -163,24 +197,35 @@ export default function KelolaPanenPage() {
 
       if (json.status === "success") {
         const dataSiapExport = json.data.map((item: any, index: number) => ({
-          "No": index + 1,
-          "Tahun": item.tahun,
+          No: index + 1,
+          Tahun: item.tahun,
           "Musim Tanam": item.musim_tanam,
           "Profil Lahan": item.kondisi_lahan || "Lahan Tidak Diketahui",
           "Luas Lahan (Ha)": parseFloat(item.luas_lahan_ha),
           "Total Produksi (Ton)": parseFloat(item.total_produksi_ton),
-          "Produktivitas (Ton/Ha)": parseFloat((item.total_produksi_ton / item.luas_lahan_ha).toFixed(2)),
+          "Produktivitas (Ton/Ha)": parseFloat(
+            (item.total_produksi_ton / item.luas_lahan_ha).toFixed(2),
+          ),
         }));
 
         const ws = XLSX.utils.json_to_sheet(dataSiapExport);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Histori Panen");
 
-        const tanggal = new Date().toISOString().split('T')[0];
+        const tanggal = new Date().toISOString().split("T")[0];
         XLSX.writeFile(wb, `Rekap_Data_Panen_${tanggal}.xlsx`);
+        Swal.fire({
+          icon: "success",
+          title: "Export Excel berhasil",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (error) {
-      alert("Gagal melakukan export Excel!");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal mengekspor data",
+      });
     }
   };
 
@@ -200,8 +245,7 @@ export default function KelolaPanenPage() {
 
           <div className="col-span-2 grid grid-cols-1 gap-3 h-fit">
             <div className="flex justify-end gap-1 md:gap-2 md:px-3">
-              
-              <button 
+              <button
                 onClick={handleExportExcel}
                 className="flex items-center gap-2 text-green-600 hover:bg-green-700 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shrink-0 border border-green-600 hover:border-green-700"
               >

@@ -12,12 +12,13 @@ import {
   AlertCircle,
   Upload,
   Download,
-  FileSpreadsheet, 
+  FileSpreadsheet,
 } from "lucide-react";
 import * as XLSX from "xlsx";
 import ModalWrapper from "@/components/modal/ModalWrapper";
 import TableSkeleton from "@/components/skeleton/TableIklimSkeleton";
 import { useAuthStore } from "@/stores/useAuthStore";
+import Swal from "sweetalert2";
 
 const initialFormState = {
   id: "",
@@ -83,7 +84,7 @@ export default function KelolaIklimPage() {
       const rawData = XLSX.utils.sheet_to_json(ws);
 
       const formattedData = rawData.map((row: any) => ({
-        id_user: user?.id || null, 
+        id_user: user?.id || null,
         username: user?.username || "Unknown",
         tahun_berlaku: row["Tahun"] || new Date().getFullYear(),
         bulan: row["Bulan"] || "JANUARI",
@@ -118,12 +119,27 @@ export default function KelolaIklimPage() {
         setIsPreviewModalOpen(false);
         setPreviewData([]);
         fetchData(1, "");
+
+        Swal.fire({
+          icon: "success",
+          title: "Data berhasil disimpan",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
         const err = await res.json();
-        alert(`Gagal: ${err.message}`);
+
+        Swal.fire({
+          icon: "error",
+          title: "Gagal menyimpan data",
+          text: err.message,
+        });
       }
     } catch (err) {
-      alert("Terjadi kesalahan saat sinkronisasi data!");
+      Swal.fire({
+        icon: "error",
+        title: "Terjadi kesalahan server",
+      });
     }
   };
 
@@ -141,6 +157,10 @@ export default function KelolaIklimPage() {
       }
     } catch (err) {
       console.error("Error fetching", err);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal memuat data iklim",
+      });
     } finally {
       setLoading(false);
     }
@@ -175,12 +195,27 @@ export default function KelolaIklimPage() {
       if (res.ok) {
         setIsModalOpen(false);
         fetchData(currentPage, searchTerm);
+        setFormData(initialFormState);
+
+        Swal.fire({
+          icon: "success",
+          title: `Data berhasil ${modalMode === "tambah" ? "ditambahkan" : "diperbarui"}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
         const err = await res.json();
-        alert(`Gagal: ${err.message}`);
+        Swal.fire({
+          icon: "error",
+          title: "Gagal menyimpan data",
+          text: err.message,
+        });
       }
     } catch (err) {
-      alert("Terjadi kesalahan server");
+      Swal.fire({
+        icon: "error",
+        title: "Terjadi kesalahan server",
+      });
     }
   };
 
@@ -194,9 +229,19 @@ export default function KelolaIklimPage() {
         if (data.length === 1 && currentPage > 1)
           setCurrentPage((prev) => prev - 1);
         else fetchData(currentPage, searchTerm);
+
+        Swal.fire({
+          icon: "success",
+          title: "Data berhasil dihapus",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (err) {
-      alert("Gagal menghapus data");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal menghapus data",
+      });
     }
   };
 
@@ -207,24 +252,34 @@ export default function KelolaIklimPage() {
 
       if (json.status === "success") {
         const dataSiapExport = json.data.map((item: any, index: number) => ({
-          "No": index + 1,
-          "Tahun": item.tahun_berlaku,
-          "Bulan": item.bulan,
+          No: index + 1,
+          Tahun: item.tahun_berlaku,
+          Bulan: item.bulan,
           "Curah Hujan (mm)": item.curah_hujan_mm,
           "Suhu (°C)": item.suhu_rata_rata,
           "Kelembapan (%)": item.kelembapan_persen,
-          "Keterangan": item.keterangan_sumber || "-",
+          Keterangan: item.keterangan_sumber || "-",
         }));
 
         const ws = XLSX.utils.json_to_sheet(dataSiapExport);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Data Iklim");
 
-        const tanggal = new Date().toISOString().split('T')[0];
+        const tanggal = new Date().toISOString().split("T")[0];
         XLSX.writeFile(wb, `Rekap_Data_Iklim_${tanggal}.xlsx`);
+
+        Swal.fire({
+          icon: "success",
+          title: "Export Excel berhasil",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       }
     } catch (error) {
-      alert("Gagal melakukan export Excel!");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal mengekspor data",
+      });
     }
   };
 
@@ -263,7 +318,7 @@ export default function KelolaIklimPage() {
                 />
               </label>
 
-              <button 
+              <button
                 onClick={handleExportExcel}
                 className="flex whitespace-nowrap items-center gap-2 text-green-600 hover:bg-green-700 hover:text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors border border-green-600 hover:border-green-700"
               >

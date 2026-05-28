@@ -305,9 +305,7 @@ export default function DashboardPage() {
   }
 
   return (
-    // 🌟 Tambahan print:bg-white print:p-0 agar background bersih saat di-print
     <div className="space-y-5 sm:space-y-6 md:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 print:bg-white print:p-0">
-      {/* 1. HEADER SECTION - Disembunyikan saat Print */}
       <div className="bg-linear-to-r from-green-700 to-emerald-600 p-5 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl shadow-lg text-white print:hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold">
@@ -338,9 +336,7 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* 2. KPI CARDS - Responsive Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-        {/* Tambahan print:shadow-none print:border-gray-300 agar tinta printer efisien */}
         <div className="bg-white p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 sm:gap-5 hover:shadow-md transition print:shadow-none print:border-gray-300">
           <div className="p-3 sm:p-4 bg-purple-50 text-purple-600 rounded-xl shrink-0">
             <Users size={22} className="sm:w-6 sm:h-6 md:w-7 md:h-7" />
@@ -387,8 +383,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* 3. CHARTS SECTION - Responsive */}
-      {/* Tambahan print:break-inside-avoid agar grafik tidak terpotong pindah halaman */}
       <div className="bg-white p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm print:shadow-none print:break-inside-avoid">
         <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-1 sm:mb-2">
           Evaluasi Historis Panen Desa
@@ -404,7 +398,6 @@ export default function DashboardPage() {
         ></div>
       </div>
 
-      {/* Container Grafik Kecil, print:block agar tidak kesempitan di kertas */}
       <div className="grid lg:grid-cols-3 gap-5 sm:gap-6 print:block">
         <div className="bg-white p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm lg:col-span-2 print:shadow-none print:mb-6 print:break-inside-avoid">
           <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-4 sm:mb-6">
@@ -434,7 +427,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* 4. ACTIVITY LOG TABLE - DISEMBUNYIKAN SAAT PRINT */}
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 overflow-hidden print:hidden">
         <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-100 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
           <h3 className="font-bold text-gray-800 text-sm sm:text-base">
